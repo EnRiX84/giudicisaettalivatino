@@ -1,0 +1,1598 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestione Sito - IISS Giudici Saetta e Livatino</title>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Jodit WYSIWYG Editor -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jodit/4.6.13/es2018/jodit.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jodit/4.6.13/es2018/jodit.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; color: #2d2d2d; }
+
+    .admin-header {
+      background: linear-gradient(135deg, #1a3a6b, #2a5298);
+      color: #fff; padding: 1.5rem 2rem;
+      display: flex; align-items: center; gap: 1rem;
+    }
+    .admin-header h1 { font-size: 1.3rem; font-weight: 600; }
+    .admin-header a { color: #c9a84c; text-decoration: none; font-size: 0.85rem; }
+
+    .admin-container { max-width: 900px; margin: 0 auto; padding: 0 1rem 2rem; }
+
+    /* Tab Navigation */
+    .tab-nav {
+      display: flex; background: #fff; border-bottom: 2px solid #e0e0e0;
+      max-width: 900px; margin: 0 auto;
+    }
+    .tab-btn {
+      padding: 1rem 2rem; border: none; background: none;
+      font-family: inherit; font-size: 0.95rem; font-weight: 600;
+      color: #888; cursor: pointer; border-bottom: 3px solid transparent;
+      margin-bottom: -2px; transition: all 0.2s;
+    }
+    .tab-btn:hover { color: #1a3a6b; }
+    .tab-btn.active { color: #1a3a6b; border-bottom-color: #c9a84c; }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+
+    .admin-section {
+      background: #fff; border-radius: 12px; padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 1.5rem;
+    }
+    .admin-section h2 {
+      font-size: 1.1rem; color: #1a3a6b; margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 2px solid #c9a84c;
+    }
+
+    .form-group { margin-bottom: 1rem; }
+    .form-group label {
+      display: block; font-weight: 600; font-size: 0.85rem;
+      color: #555; margin-bottom: 0.3rem;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+      width: 100%; padding: 0.6rem 0.8rem; border: 1.5px solid #ddd;
+      border-radius: 8px; font-family: inherit; font-size: 0.9rem;
+      transition: border-color 0.2s;
+    }
+    .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+      outline: none; border-color: #1a3a6b;
+    }
+    .form-group textarea { resize: vertical; min-height: 60px; }
+    .form-group small { color: #888; font-size: 0.75rem; }
+
+    .link-row {
+      display: flex; gap: 0.5rem; align-items: end; margin-bottom: 0.5rem;
+    }
+    .link-row .form-group { flex: 1; margin-bottom: 0; }
+    .link-row .form-group:first-child { flex: 0.4; }
+
+    .btn {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      padding: 0.6rem 1.2rem; border: none; border-radius: 8px;
+      font-family: inherit; font-size: 0.85rem; font-weight: 600;
+      cursor: pointer; transition: all 0.2s;
+    }
+    .btn-primary { background: #1a3a6b; color: #fff; }
+    .btn-primary:hover { background: #2a5298; }
+    .btn-success { background: #28a745; color: #fff; }
+    .btn-success:hover { background: #218838; }
+    .btn-danger { background: #dc3545; color: #fff; padding: 0.4rem 0.7rem; font-size: 0.8rem; }
+    .btn-danger:hover { background: #c82333; }
+    .btn-outline { background: transparent; border: 1.5px solid #1a3a6b; color: #1a3a6b; }
+    .btn-outline:hover { background: #1a3a6b; color: #fff; }
+    .btn-small { padding: 0.4rem 0.8rem; font-size: 0.8rem; }
+    .btn-warning { background: #e0a800; color: #fff; }
+    .btn-warning:hover { background: #c99700; }
+
+    .actions { display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap; }
+
+    /* Lista notizie esistenti */
+    .news-list { list-style: none; }
+    .news-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0.8rem 1rem; border: 1px solid #eee; border-radius: 8px;
+      margin-bottom: 0.5rem; background: #fafafa; transition: background 0.2s;
+    }
+    .news-item:hover { background: #f0f4ff; }
+    .news-item-info { flex: 1; }
+    .news-item-title { font-weight: 600; font-size: 0.9rem; }
+    .news-item-meta { font-size: 0.75rem; color: #888; margin-top: 0.2rem; }
+    .news-item-tag {
+      display: inline-block; padding: 0.15rem 0.5rem; border-radius: 4px;
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase;
+      margin-right: 0.5rem;
+    }
+    .tag-avviso { background: #fff3cd; color: #856404; }
+    .tag-progetto { background: #d4edda; color: #155724; }
+    .tag-erasmus { background: #cce5ff; color: #004085; }
+    .tag-istituto { background: #e2e3f1; color: #383d6e; }
+    .tag-graduatoria { background: #f8d7da; color: #721c24; }
+    .tag-sindacale { background: #d6d8db; color: #383d41; }
+    .news-item-actions { display: flex; gap: 0.3rem; flex-shrink: 0; }
+
+    .move-btn {
+      background: none; border: 1px solid #ccc; border-radius: 4px;
+      padding: 0.2rem 0.5rem; cursor: pointer; font-size: 0.8rem;
+    }
+    .move-btn:hover { background: #eee; }
+
+    /* Output JSON */
+    .json-output {
+      background: #1e1e1e; color: #d4d4d4; padding: 1rem;
+      border-radius: 8px; font-family: 'Courier New', monospace;
+      font-size: 0.8rem; overflow-x: auto; white-space: pre;
+      max-height: 400px; overflow-y: auto; display: none;
+    }
+
+    .instructions {
+      background: #fff8e1; border-left: 4px solid #c9a84c; padding: 1rem;
+      border-radius: 0 8px 8px 0; margin-bottom: 1.5rem; font-size: 0.85rem;
+    }
+    .instructions strong { color: #1a3a6b; }
+    .instructions ol { padding-left: 1.2rem; margin-top: 0.5rem; }
+    .instructions li { margin-bottom: 0.3rem; }
+
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem; background: #28a745;
+      color: #fff; padding: 0.8rem 1.5rem; border-radius: 8px;
+      font-weight: 600; box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transform: translateY(100px); opacity: 0; transition: all 0.3s;
+      z-index: 1000;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+
+    /* Page editor styles */
+    .page-selector-row {
+      display: flex; gap: 0.8rem; align-items: end; flex-wrap: wrap;
+    }
+    .page-selector-row .form-group { flex: 1; min-width: 200px; margin-bottom: 0; }
+
+    .editor-toolbar {
+      display: flex; gap: 0.5rem; margin-bottom: 0.8rem; flex-wrap: wrap;
+      padding: 0.6rem; background: #f5f6fa; border-radius: 8px;
+    }
+    .editor-toolbar .btn { font-size: 0.78rem; padding: 0.35rem 0.7rem; }
+
+    /* Jodit WYSIWYG styling */
+    .jodit-container { border-radius: 8px !important; }
+    .jodit-wysiwyg .doc-item { border: 1px dashed #ccc; padding: 0.5rem; margin: 0.5rem 0; border-radius: 4px; }
+    .jodit-wysiwyg .content-block { border-left: 3px solid #c9a84c; padding-left: 1rem; margin: 0.5rem 0; }
+    .jodit-wysiwyg .link-card { display: block; border: 1px dashed #ccc; padding: 0.5rem; margin: 0.5rem 0; }
+
+    /* Upload styles */
+    .upload-label { cursor: pointer; white-space: nowrap; }
+    .upload-status { font-size: 0.78rem; margin-top: 0.3rem; }
+    .upload-status.success { color: #28a745; }
+    .upload-status.error { color: #dc3545; }
+    .upload-status.loading { color: #555; font-style: italic; }
+
+    .page-actions {
+      display: flex; gap: 0.5rem; margin-top: 1rem; flex-wrap: wrap;
+      align-items: center;
+    }
+    .page-actions .spacer { flex: 1; }
+
+    .unsaved-badge {
+      display: none; font-size: 0.75rem; color: #e0a800;
+      font-weight: 600; padding: 0.3rem 0.6rem;
+      background: #fff8e1; border-radius: 4px;
+    }
+    .unsaved-badge.visible { display: inline-block; }
+
+    /* Modal */
+    .modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); z-index: 900;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: #fff; border-radius: 12px; padding: 1.5rem;
+      width: 90%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+    .modal h3 {
+      font-size: 1rem; color: #1a3a6b; margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 2px solid #c9a84c;
+    }
+    .modal .actions { justify-content: flex-end; }
+
+    .loading-text { color: #888; font-style: italic; font-size: 0.85rem; }
+
+    /* Login overlay */
+    .login-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: linear-gradient(135deg, #1a3a6b 0%, #2a5298 50%, #1a3a6b 100%);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 2000;
+    }
+    .login-box {
+      background: #fff; border-radius: 16px; padding: 2.5rem;
+      width: 90%; max-width: 400px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    }
+    .login-box h2 {
+      color: #1a3a6b; font-size: 1.3rem; margin-bottom: 0.3rem;
+      text-align: center;
+    }
+    .login-box .login-subtitle {
+      color: #888; font-size: 0.85rem; text-align: center;
+      margin-bottom: 1.5rem;
+    }
+    .login-box .form-group { margin-bottom: 1rem; }
+    .login-box .btn-primary {
+      width: 100%; padding: 0.8rem; font-size: 1rem;
+      margin-top: 0.5rem;
+    }
+    .login-error {
+      color: #dc3545; font-size: 0.85rem; text-align: center;
+      margin-top: 0.8rem; display: none;
+    }
+
+    /* User info nel header */
+    .user-info {
+      margin-left: auto; display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.85rem;
+    }
+    .user-info .username { font-weight: 600; }
+    .user-info .badge-ruolo {
+      background: rgba(201,168,76,0.2); color: #c9a84c;
+      padding: 0.15rem 0.5rem; border-radius: 4px;
+      font-size: 0.75rem; font-weight: 600; text-transform: uppercase;
+    }
+    .user-info .btn-header {
+      background: rgba(255,255,255,0.15); color: #fff;
+      border: 1px solid rgba(255,255,255,0.3);
+      padding: 0.3rem 0.7rem; border-radius: 6px;
+      font-family: inherit; font-size: 0.78rem; cursor: pointer;
+      transition: background 0.2s;
+    }
+    .user-info .btn-header:hover { background: rgba(255,255,255,0.25); }
+
+    /* Tabella utenti */
+    .users-table {
+      width: 100%; border-collapse: collapse; font-size: 0.85rem;
+    }
+    .users-table th {
+      text-align: left; padding: 0.6rem 0.8rem; background: #f5f6fa;
+      color: #555; font-weight: 600; font-size: 0.78rem;
+      text-transform: uppercase; border-bottom: 2px solid #e0e0e0;
+    }
+    .users-table td {
+      padding: 0.6rem 0.8rem; border-bottom: 1px solid #eee;
+      vertical-align: middle;
+    }
+    .users-table tr:hover td { background: #f0f4ff; }
+    .users-table select {
+      padding: 0.3rem 0.5rem; border: 1.5px solid #ddd;
+      border-radius: 6px; font-family: inherit; font-size: 0.82rem;
+    }
+    .add-user-form {
+      display: flex; gap: 0.8rem; align-items: end; flex-wrap: wrap;
+      padding-top: 1rem; border-top: 1px solid #eee; margin-top: 1rem;
+    }
+    .add-user-form .form-group { flex: 1; min-width: 140px; margin-bottom: 0; }
+
+    @media (max-width: 600px) {
+      .link-row { flex-direction: column; }
+      .news-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+      .tab-btn { padding: 0.8rem 1rem; font-size: 0.85rem; }
+      .page-selector-row { flex-direction: column; }
+      .user-info { flex-wrap: wrap; gap: 0.4rem; }
+      .add-user-form { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Login Screen -->
+<div id="loginScreen" class="login-overlay">
+  <div class="login-box">
+    <h2>Gestione Sito</h2>
+    <p class="login-subtitle">IISS Giudici Saetta e Livatino</p>
+    <form id="loginForm">
+      <div class="form-group">
+        <label for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" placeholder="Username" required autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" placeholder="Password" required autocomplete="current-password">
+      </div>
+      <button type="submit" class="btn btn-primary" id="loginBtn">Accedi</button>
+    </form>
+    <p class="login-error" id="loginError"></p>
+  </div>
+</div>
+
+<!-- Admin App (nascosto fino al login) -->
+<div id="adminApp" style="display:none">
+
+<div class="admin-header">
+  <div>
+    <h1>Gestione Sito</h1>
+    <a href="index.html">Torna al sito</a>
+  </div>
+  <div class="user-info" id="userInfo">
+    <span class="username" id="headerUsername"></span>
+    <span class="badge-ruolo" id="headerRuolo"></span>
+    <button class="btn-header" id="btnCambiaPassword">Cambia password</button>
+    <button class="btn-header" id="btnLogout">Esci</button>
+  </div>
+</div>
+
+<!-- Tab Navigation -->
+<div class="tab-nav">
+  <button class="tab-btn active" data-tab="tab-notizie">Notizie</button>
+  <button class="tab-btn" data-tab="tab-pagine">Pagine</button>
+  <button class="tab-btn" data-tab="tab-utenti" id="tabUtentiBtn" style="display:none">Utenti</button>
+</div>
+
+<div class="admin-container">
+
+<!-- ===================== TAB NOTIZIE ===================== -->
+<div id="tab-notizie" class="tab-content active" style="padding-top:1.5rem">
+
+  <div class="instructions">
+    <strong>Come funziona:</strong>
+    <ol>
+      <li>Usa il form qui sotto per aggiungere una nuova notizia</li>
+      <li>Puoi riordinare o eliminare le notizie esistenti dalla lista</li>
+      <li>Quando hai finito, clicca <strong>"Pubblica sul sito"</strong></li>
+      <li>Le modifiche saranno visibili immediatamente sul sito!</li>
+    </ol>
+  </div>
+
+  <!-- Form nuova notizia -->
+  <div class="admin-section">
+    <h2>Aggiungi Nuova Notizia</h2>
+    <form id="newsForm">
+      <div class="form-group">
+        <label for="titolo">Titolo *</label>
+        <input type="text" id="titolo" placeholder="Es: Borse di Studio 2025-2026" required>
+      </div>
+      <div style="display:flex; gap:1rem; flex-wrap:wrap">
+        <div class="form-group" style="flex:1; min-width:200px">
+          <label for="categoria">Categoria *</label>
+          <select id="categoria" required>
+            <option value="avviso">Avviso</option>
+            <option value="istituto">Istituto</option>
+            <option value="progetto">Progetto</option>
+            <option value="graduatoria">Graduatoria</option>
+            <option value="erasmus">Erasmus+</option>
+            <option value="sindacale">Sindacale</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex:1; min-width:200px">
+          <label for="data">Data *</label>
+          <input type="text" id="data" placeholder="Es: 15 Marzo 2026 oppure A.S. 2025/2026" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="descrizione">Descrizione *</label>
+        <textarea id="descrizione" placeholder="Breve descrizione dell'avviso o comunicazione..." required></textarea>
+      </div>
+
+      <div id="linksContainer">
+        <label style="font-weight:600; font-size:0.85rem; color:#555; margin-bottom:0.5rem; display:block">
+          Allegati / Link (opzionali)
+        </label>
+        <div class="link-row" data-link-index="0">
+          <div class="form-group">
+            <input type="text" placeholder="Testo link" class="link-text">
+            <small>Es: Scarica PDF</small>
+          </div>
+          <div class="form-group">
+            <input type="url" placeholder="https://..." class="link-url">
+            <small>URL completo del documento</small>
+          </div>
+          <label class="btn btn-outline btn-small upload-label" title="Carica file" style="margin-bottom:1.2rem">
+            Carica
+            <input type="file" class="link-file-input" style="display:none" accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.xls,.xlsx,.ods,.csv,.ppt,.pptx,.odp,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.zip,.rar,.7z">
+          </label>
+          <button type="button" class="btn btn-danger remove-link" title="Rimuovi" style="margin-bottom:1.2rem">&times;</button>
+        </div>
+      </div>
+      <button type="button" class="btn btn-outline btn-small" id="addLink">+ Aggiungi altro link</button>
+
+      <div class="actions">
+        <button type="submit" class="btn btn-primary">Aggiungi notizia in cima</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Lista notizie -->
+  <div class="admin-section">
+    <h2>Notizie Attuali (<span id="newsCount">0</span>)</h2>
+    <ul class="news-list" id="newsList"></ul>
+  </div>
+
+  <!-- Salvataggio notizie -->
+  <div class="admin-section">
+    <h2>Pubblica Modifiche</h2>
+    <p style="font-size:0.85rem; margin-bottom:1rem; color:#555">
+      Clicca il pulsante per pubblicare le modifiche. Le notizie saranno visibili immediatamente sul sito.
+    </p>
+    <div class="actions">
+      <button class="btn btn-success" id="saveBtn" style="font-size:1rem; padding:0.8rem 2rem">
+        Pubblica sul sito
+      </button>
+      <button class="btn btn-outline btn-small" id="downloadBtn">Scarica backup JSON</button>
+      <button class="btn btn-outline btn-small" id="showJsonBtn">Mostra JSON</button>
+    </div>
+    <div id="saveStatus" style="margin-top:0.8rem; font-size:0.85rem; display:none"></div>
+    <pre class="json-output" id="jsonOutput"></pre>
+  </div>
+
+</div>
+
+<!-- ===================== TAB PAGINE ===================== -->
+<div id="tab-pagine" class="tab-content" style="padding-top:1.5rem">
+
+  <div class="instructions">
+    <strong>Editor Pagine:</strong>
+    <ol>
+      <li>Seleziona una pagina dal menu a tendina e clicca <strong>"Carica"</strong></li>
+      <li>Modifica titolo, sottotitolo e contenuto nell'editor visuale (WYSIWYG)</li>
+      <li>Usa i pulsanti <strong>"Inserisci"</strong> per aggiungere documenti (con upload file), sezioni, ecc.</li>
+      <li>Clicca il pulsante <strong>"Source"</strong> nell'editor per vedere/modificare il codice HTML</li>
+      <li>Clicca <strong>"Pubblica modifiche"</strong> per salvare (viene creato un backup automatico)</li>
+      <li>Scorciatoia: <strong>Ctrl+S</strong> per salvare rapidamente</li>
+    </ol>
+  </div>
+
+  <!-- Selettore pagina -->
+  <div class="admin-section">
+    <h2>Seleziona Pagina</h2>
+    <div class="page-selector-row">
+      <div class="form-group">
+        <label for="pageSelect">Pagina</label>
+        <select id="pageSelect">
+          <option value="">-- Seleziona una pagina --</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" id="loadPageBtn" style="margin-bottom:0">Carica</button>
+    </div>
+  </div>
+
+  <!-- Editor pagina (nascosto finché non si carica una pagina) -->
+  <div id="pageEditorSection" style="display:none">
+
+    <!-- Titolo e sottotitolo -->
+    <div class="admin-section">
+      <h2>Intestazione Pagina</h2>
+      <div class="form-group">
+        <label for="pageTitolo">Titolo (H1)</label>
+        <input type="text" id="pageTitolo" placeholder="Titolo della pagina">
+      </div>
+      <div class="form-group">
+        <label for="pageSottotitolo">Sottotitolo</label>
+        <input type="text" id="pageSottotitolo" placeholder="Breve descrizione sotto il titolo">
+      </div>
+    </div>
+
+    <!-- Editor contenuto -->
+    <div class="admin-section">
+      <h2>Contenuto Pagina <span class="unsaved-badge" id="unsavedBadge">Modifiche non salvate</span></h2>
+
+      <!-- Toolbar inserimento -->
+      <div class="editor-toolbar">
+        <span style="font-size:0.78rem; font-weight:600; color:#555; padding:0.35rem 0">Inserisci:</span>
+        <button class="btn btn-outline btn-small" type="button" onclick="apriModale('documento')">Documento PDF</button>
+        <button class="btn btn-outline btn-small" type="button" onclick="apriModale('sezione')">Sezione (H2)</button>
+        <button class="btn btn-outline btn-small" type="button" onclick="apriModale('blocco')">Blocco Testo</button>
+        <button class="btn btn-outline btn-small" type="button" onclick="apriModale('linkcard')">Link Card</button>
+      </div>
+
+      <!-- Jodit WYSIWYG editor -->
+      <textarea id="pageContentEditor"></textarea>
+
+      <!-- Azioni -->
+      <div class="page-actions">
+        <button class="btn btn-success" id="savePageBtn" style="font-size:1rem; padding:0.8rem 2rem">
+          Pubblica modifiche
+        </button>
+        <button class="btn btn-outline btn-small" id="previewPageBtn">Anteprima</button>
+        <button class="btn btn-outline btn-small" id="downloadPageBtn">Scarica backup HTML</button>
+        <span class="spacer"></span>
+        <span id="pageStatus" style="font-size:0.85rem"></span>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- ===================== TAB UTENTI ===================== -->
+<div id="tab-utenti" class="tab-content" style="padding-top:1.5rem">
+
+  <div class="admin-section">
+    <h2>Gestione Utenti</h2>
+    <table class="users-table">
+      <thead>
+        <tr>
+          <th>Username</th>
+          <th>Ruolo</th>
+          <th>Data Creazione</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="usersTableBody"></tbody>
+    </table>
+
+    <div class="add-user-form">
+      <div class="form-group">
+        <label for="newUsername">Username</label>
+        <input type="text" id="newUsername" placeholder="nuovo.utente">
+      </div>
+      <div class="form-group">
+        <label for="newPassword">Password</label>
+        <input type="password" id="newPassword" placeholder="min. 6 caratteri">
+      </div>
+      <div class="form-group">
+        <label for="newRuolo">Ruolo</label>
+        <select id="newRuolo">
+          <option value="editor">Editor</option>
+          <option value="admin">Admin</option>
+        </select>
+      </div>
+      <button class="btn btn-primary btn-small" id="btnCreaUtente">Aggiungi Utente</button>
+    </div>
+  </div>
+
+</div>
+
+</div><!-- /admin-container -->
+</div><!-- /adminApp -->
+
+<div class="toast" id="toast"></div>
+
+<!-- Modale Cambio Password -->
+<div class="modal-overlay" id="passwordModalOverlay">
+  <div class="modal">
+    <h3>Cambia Password</h3>
+    <div class="form-group">
+      <label for="pwdAttuale">Password attuale</label>
+      <input type="password" id="pwdAttuale" placeholder="Password attuale">
+    </div>
+    <div class="form-group">
+      <label for="pwdNuova">Nuova password</label>
+      <input type="password" id="pwdNuova" placeholder="Minimo 6 caratteri">
+    </div>
+    <div class="form-group">
+      <label for="pwdConferma">Conferma nuova password</label>
+      <input type="password" id="pwdConferma" placeholder="Ripeti nuova password">
+    </div>
+    <p id="pwdError" style="color:#dc3545;font-size:0.85rem;display:none"></p>
+    <div class="actions">
+      <button class="btn btn-outline btn-small" type="button" id="btnAnnullaPassword">Annulla</button>
+      <button class="btn btn-primary" type="button" id="btnConfermaPassword">Cambia Password</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modale Inserimento Snippet -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="snippetModal">
+    <h3 id="modalTitle">Inserisci elemento</h3>
+    <div id="modalBody"></div>
+    <div class="actions">
+      <button class="btn btn-outline btn-small" type="button" onclick="chiudiModale()">Annulla</button>
+      <button class="btn btn-primary" type="button" id="modalConfirmBtn">Inserisci</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// AUTH
+// ============================================================
+let currentUser = null; // { username, ruolo }
+
+async function apiFetch(url, options = {}) {
+  const res = await fetch(url, options);
+  if (res.status === 401) {
+    // Sessione scaduta
+    currentUser = null;
+    showLoginScreen();
+    throw new Error('Sessione scaduta, effettua di nuovo il login');
+  }
+  return res;
+}
+
+async function checkAuth() {
+  try {
+    const res = await fetch('/api/utente-corrente');
+    if (res.ok) {
+      const data = await res.json();
+      if (data.ok) {
+        currentUser = { username: data.username, ruolo: data.ruolo };
+        showAdminApp();
+        return true;
+      }
+    }
+  } catch (e) {}
+  showLoginScreen();
+  return false;
+}
+
+function showLoginScreen() {
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('adminApp').style.display = 'none';
+  document.getElementById('loginUsername').focus();
+}
+
+function showAdminApp() {
+  document.getElementById('loginScreen').style.display = 'none';
+  document.getElementById('adminApp').style.display = 'block';
+  document.getElementById('headerUsername').textContent = currentUser.username;
+  document.getElementById('headerRuolo').textContent = currentUser.ruolo;
+
+  // Mostra tab Utenti solo per admin
+  const tabUtentiBtn = document.getElementById('tabUtentiBtn');
+  tabUtentiBtn.style.display = currentUser.ruolo === 'admin' ? '' : 'none';
+
+  // Carica dati
+  caricaNotizie();
+  caricaListaPagine();
+  if (currentUser.ruolo === 'admin') {
+    caricaListaUtenti();
+  }
+}
+
+// Login
+document.getElementById('loginForm').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const loginBtn = document.getElementById('loginBtn');
+  const errorEl = document.getElementById('loginError');
+  loginBtn.disabled = true;
+  loginBtn.textContent = 'Accesso in corso...';
+  errorEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        username: document.getElementById('loginUsername').value.trim(),
+        password: document.getElementById('loginPassword').value
+      })
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      currentUser = { username: data.username, ruolo: data.ruolo };
+      document.getElementById('loginForm').reset();
+      showAdminApp();
+    } else {
+      errorEl.textContent = data.errore || 'Errore di login';
+      errorEl.style.display = 'block';
+    }
+  } catch (err) {
+    errorEl.textContent = 'Errore di rete: ' + err.message;
+    errorEl.style.display = 'block';
+  }
+
+  loginBtn.disabled = false;
+  loginBtn.textContent = 'Accedi';
+});
+
+// Logout
+document.getElementById('btnLogout').addEventListener('click', async () => {
+  try {
+    await fetch('/api/logout', { method: 'POST' });
+  } catch (e) {}
+  currentUser = null;
+  showLoginScreen();
+});
+
+// ============================================================
+// CAMBIO PASSWORD
+// ============================================================
+document.getElementById('btnCambiaPassword').addEventListener('click', () => {
+  document.getElementById('passwordModalOverlay').classList.add('active');
+  document.getElementById('pwdAttuale').focus();
+});
+
+document.getElementById('btnAnnullaPassword').addEventListener('click', () => {
+  document.getElementById('passwordModalOverlay').classList.remove('active');
+  document.getElementById('pwdAttuale').value = '';
+  document.getElementById('pwdNuova').value = '';
+  document.getElementById('pwdConferma').value = '';
+  document.getElementById('pwdError').style.display = 'none';
+});
+
+document.getElementById('btnConfermaPassword').addEventListener('click', async () => {
+  const attuale = document.getElementById('pwdAttuale').value;
+  const nuova = document.getElementById('pwdNuova').value;
+  const conferma = document.getElementById('pwdConferma').value;
+  const errorEl = document.getElementById('pwdError');
+  errorEl.style.display = 'none';
+
+  if (!attuale || !nuova || !conferma) {
+    errorEl.textContent = 'Compila tutti i campi';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (nuova !== conferma) {
+    errorEl.textContent = 'Le due password non coincidono';
+    errorEl.style.display = 'block';
+    return;
+  }
+  if (nuova.length < 6) {
+    errorEl.textContent = 'La nuova password deve avere almeno 6 caratteri';
+    errorEl.style.display = 'block';
+    return;
+  }
+
+  try {
+    const res = await apiFetch('/api/cambia-password', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password_attuale: attuale, password_nuova: nuova })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      document.getElementById('passwordModalOverlay').classList.remove('active');
+      document.getElementById('pwdAttuale').value = '';
+      document.getElementById('pwdNuova').value = '';
+      document.getElementById('pwdConferma').value = '';
+      showToast('Password cambiata con successo');
+    } else {
+      errorEl.textContent = data.errore || 'Errore';
+      errorEl.style.display = 'block';
+    }
+  } catch (err) {
+    errorEl.textContent = err.message;
+    errorEl.style.display = 'block';
+  }
+});
+
+// Chiudi modale password con click fuori
+document.getElementById('passwordModalOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    document.getElementById('btnAnnullaPassword').click();
+  }
+});
+
+// ============================================================
+// GESTIONE UTENTI (solo admin)
+// ============================================================
+async function caricaListaUtenti() {
+  try {
+    const res = await apiFetch('/api/lista-utenti');
+    const data = await res.json();
+    if (!data.ok) return;
+
+    const tbody = document.getElementById('usersTableBody');
+    tbody.innerHTML = data.utenti.map(u => `
+      <tr>
+        <td><strong>${escapeHtml(u.username)}</strong></td>
+        <td>
+          <select onchange="cambiaRuolo('${escapeHtml(u.username)}', this.value)" ${u.username === currentUser.username ? 'disabled' : ''}>
+            <option value="editor" ${u.ruolo === 'editor' ? 'selected' : ''}>Editor</option>
+            <option value="admin" ${u.ruolo === 'admin' ? 'selected' : ''}>Admin</option>
+          </select>
+        </td>
+        <td style="font-size:0.8rem;color:#888">${u.creato ? new Date(u.creato).toLocaleDateString('it-IT') : '-'}</td>
+        <td>
+          ${u.username !== currentUser.username
+            ? `<button class="btn btn-danger btn-small" onclick="eliminaUtente('${escapeHtml(u.username)}')">Elimina</button>`
+            : '<span style="font-size:0.75rem;color:#888">Tu</span>'}
+        </td>
+      </tr>
+    `).join('');
+  } catch (err) {
+    console.error('Errore caricamento utenti:', err);
+  }
+}
+
+async function cambiaRuolo(username, nuovoRuolo) {
+  try {
+    const res = await apiFetch('/api/cambia-ruolo', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, ruolo: nuovoRuolo })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showToast(data.messaggio);
+      caricaListaUtenti();
+    } else {
+      showToast(data.errore, true);
+      caricaListaUtenti(); // Ricarica per resettare la select
+    }
+  } catch (err) {
+    showToast(err.message, true);
+    caricaListaUtenti();
+  }
+}
+
+async function eliminaUtente(username) {
+  if (!confirm(`Eliminare l'utente "${username}"?`)) return;
+  try {
+    const res = await apiFetch('/api/elimina-utente', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showToast(data.messaggio);
+      caricaListaUtenti();
+    } else {
+      showToast(data.errore, true);
+    }
+  } catch (err) {
+    showToast(err.message, true);
+  }
+}
+
+document.getElementById('btnCreaUtente').addEventListener('click', async () => {
+  const username = document.getElementById('newUsername').value.trim();
+  const password = document.getElementById('newPassword').value;
+  const ruolo = document.getElementById('newRuolo').value;
+
+  if (!username || !password) {
+    showToast('Username e password obbligatori', true);
+    return;
+  }
+
+  try {
+    const res = await apiFetch('/api/crea-utente', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username, password, ruolo })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showToast(data.messaggio);
+      document.getElementById('newUsername').value = '';
+      document.getElementById('newPassword').value = '';
+      caricaListaUtenti();
+    } else {
+      showToast(data.errore, true);
+    }
+  } catch (err) {
+    showToast(err.message, true);
+  }
+});
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ============================================================
+// NOTIZIE
+// ============================================================
+let notizie = [];
+const categoryLabels = {
+  avviso: 'Avviso', progetto: 'Progetto', erasmus: 'Erasmus+',
+  istituto: 'Istituto', graduatoria: 'Graduatoria', sindacale: 'Sindacale'
+};
+
+function caricaNotizie() {
+  fetch('data/notizie.json')
+    .then(r => r.json())
+    .then(data => { notizie = data; renderList(); })
+    .catch(() => { notizie = []; renderList(); });
+}
+
+function renderList() {
+  const list = document.getElementById('newsList');
+  document.getElementById('newsCount').textContent = notizie.length;
+  list.innerHTML = notizie.map((n, i) => `
+    <li class="news-item" data-index="${i}">
+      <div class="news-item-info">
+        <div>
+          <span class="news-item-tag tag-${n.categoria}">${categoryLabels[n.categoria] || n.categoria}</span>
+          <span class="news-item-title">${escapeHtml(n.titolo)}</span>
+        </div>
+        <div class="news-item-meta">${escapeHtml(n.data)} · ${n.links.length} allegat${n.links.length === 1 ? 'o' : 'i'}</div>
+      </div>
+      <div class="news-item-actions">
+        <button class="move-btn" onclick="moveNews(${i}, -1)" title="Sposta su" ${i === 0 ? 'disabled' : ''}>&#9650;</button>
+        <button class="move-btn" onclick="moveNews(${i}, 1)" title="Sposta giù" ${i === notizie.length - 1 ? 'disabled' : ''}>&#9660;</button>
+        <button class="btn btn-danger" onclick="deleteNews(${i})" title="Elimina">&#10005;</button>
+      </div>
+    </li>
+  `).join('');
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+document.getElementById('newsForm').addEventListener('submit', (e) => {
+  e.preventDefault();
+  const links = [];
+  document.querySelectorAll('.link-row').forEach(row => {
+    const testo = row.querySelector('.link-text').value.trim();
+    const url = row.querySelector('.link-url').value.trim();
+    if (testo && url) links.push({ testo, url });
+  });
+
+  const nuova = {
+    titolo: document.getElementById('titolo').value.trim(),
+    categoria: document.getElementById('categoria').value,
+    data: document.getElementById('data').value.trim(),
+    descrizione: document.getElementById('descrizione').value.trim(),
+    links: links
+  };
+
+  notizie.unshift(nuova);
+  renderList();
+  e.target.reset();
+  const container = document.getElementById('linksContainer');
+  const rows = container.querySelectorAll('.link-row');
+  rows.forEach((row, i) => { if (i > 0) row.remove(); });
+  rows[0].querySelector('.link-text').value = '';
+  rows[0].querySelector('.link-url').value = '';
+  // Reset upload button label
+  const uploadLabel = rows[0].querySelector('.upload-label');
+  if (uploadLabel) {
+    const fileInput = uploadLabel.querySelector('.link-file-input');
+    uploadLabel.textContent = 'Carica';
+    if (fileInput) { fileInput.value = ''; uploadLabel.appendChild(fileInput); }
+  }
+  showToast('Notizia aggiunta in cima!');
+});
+
+document.getElementById('addLink').addEventListener('click', () => {
+  const container = document.getElementById('linksContainer');
+  const index = container.querySelectorAll('.link-row').length;
+  const row = document.createElement('div');
+  row.className = 'link-row';
+  row.dataset.linkIndex = index;
+  row.innerHTML = `
+    <div class="form-group">
+      <input type="text" placeholder="Testo link" class="link-text">
+    </div>
+    <div class="form-group">
+      <input type="url" placeholder="https://..." class="link-url">
+    </div>
+    <label class="btn btn-outline btn-small upload-label" title="Carica file">
+      Carica
+      <input type="file" class="link-file-input" style="display:none" accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.xls,.xlsx,.ods,.csv,.ppt,.pptx,.odp,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.zip,.rar,.7z">
+    </label>
+    <button type="button" class="btn btn-danger remove-link" title="Rimuovi" style="margin-bottom:0">&times;</button>
+  `;
+  container.appendChild(row);
+});
+
+document.getElementById('linksContainer').addEventListener('click', (e) => {
+  if (e.target.classList.contains('remove-link')) {
+    const rows = document.querySelectorAll('.link-row');
+    if (rows.length > 1) {
+      e.target.closest('.link-row').remove();
+    } else {
+      rows[0].querySelector('.link-text').value = '';
+      rows[0].querySelector('.link-url').value = '';
+    }
+  }
+});
+
+// Upload file nei link notizie (event delegation)
+document.getElementById('linksContainer').addEventListener('change', async (e) => {
+  if (!e.target.classList.contains('link-file-input')) return;
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const row = e.target.closest('.link-row');
+  const urlInput = row.querySelector('.link-url');
+  const textInput = row.querySelector('.link-text');
+  const label = e.target.closest('.upload-label');
+
+  label.textContent = 'Caricamento...';
+  label.appendChild(e.target); // Re-append hidden input
+
+  const result = await uploadFile(file, 'notizie');
+
+  if (result.ok) {
+    urlInput.value = result.url_root;
+    if (!textInput.value.trim()) {
+      textInput.value = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
+    }
+    label.textContent = 'Caricato';
+    label.appendChild(e.target);
+    showToast('File caricato: ' + result.filename);
+  } else {
+    label.textContent = 'Carica';
+    label.appendChild(e.target);
+    showToast(result.errore, true);
+    e.target.value = '';
+  }
+});
+
+function moveNews(index, direction) {
+  const newIndex = index + direction;
+  if (newIndex < 0 || newIndex >= notizie.length) return;
+  [notizie[index], notizie[newIndex]] = [notizie[newIndex], notizie[index]];
+  renderList();
+}
+
+function deleteNews(index) {
+  if (confirm(`Eliminare "${notizie[index].titolo}"?`)) {
+    notizie.splice(index, 1);
+    renderList();
+    showToast('Notizia eliminata');
+  }
+}
+
+const saveBtn = document.getElementById('saveBtn');
+const saveStatus = document.getElementById('saveStatus');
+
+saveBtn.addEventListener('click', async () => {
+  saveBtn.disabled = true;
+  saveBtn.textContent = 'Salvataggio in corso...';
+  saveStatus.style.display = 'none';
+
+  try {
+    const res = await apiFetch('/api/salva-notizie', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(notizie)
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      saveStatus.style.display = 'block';
+      saveStatus.style.color = '#28a745';
+      saveStatus.innerHTML = '&#10003; ' + data.messaggio + ' — Le modifiche sono ora visibili sul sito.';
+      showToast('Pubblicato con successo!');
+    } else {
+      throw new Error(data.errore || 'Errore sconosciuto');
+    }
+  } catch (err) {
+    saveStatus.style.display = 'block';
+    saveStatus.style.color = '#dc3545';
+    saveStatus.innerHTML = '&#10007; Errore: ' + err.message +
+      '<br><small>Assicurati che il server sia avviato con "Avvia Gestione Sito.bat"</small>';
+    showToast('Errore nel salvataggio');
+  }
+
+  saveBtn.disabled = false;
+  saveBtn.textContent = 'Pubblica sul sito';
+});
+
+document.getElementById('downloadBtn').addEventListener('click', () => {
+  const json = JSON.stringify(notizie, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'notizie_backup.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Backup scaricato');
+});
+
+document.getElementById('showJsonBtn').addEventListener('click', () => {
+  const output = document.getElementById('jsonOutput');
+  output.textContent = JSON.stringify(notizie, null, 2);
+  output.style.display = output.style.display === 'none' ? 'block' : 'none';
+});
+
+
+// ============================================================
+// PAGINE
+// ============================================================
+let editor = null;
+let currentPage = null;
+let pageModified = false;
+let savedContent = { titolo: '', sottotitolo: '', contenuto: '' };
+
+// Inizializza Jodit WYSIWYG
+function initEditor() {
+  if (editor) return;
+  editor = Jodit.make('#pageContentEditor', {
+    height: 500,
+    language: 'it',
+    sourceEditor: 'area',
+    beautifyHTML: true,
+    cleanHTML: { allowTags: false },
+    buttons: [
+      'bold', 'italic', 'underline', '|',
+      'ul', 'ol', '|',
+      'paragraph', '|',
+      'link', 'table', 'hr', '|',
+      'undo', 'redo', '|',
+      'source', 'fullsize'
+    ],
+    events: {
+      change: function() { setPageModified(true); }
+    }
+  });
+}
+
+function setPageModified(modified) {
+  pageModified = modified;
+  const badge = document.getElementById('unsavedBadge');
+  if (modified) {
+    badge.classList.add('visible');
+  } else {
+    badge.classList.remove('visible');
+  }
+}
+
+// Carica lista pagine
+async function caricaListaPagine() {
+  try {
+    const res = await apiFetch('/api/lista-pagine');
+    const data = await res.json();
+    if (data.ok) {
+      const select = document.getElementById('pageSelect');
+      select.innerHTML = '<option value="">-- Seleziona una pagina --</option>';
+      data.pagine.forEach(p => {
+        const opt = document.createElement('option');
+        opt.value = p.file;
+        opt.textContent = `${p.titolo} (${p.file})`;
+        select.appendChild(opt);
+      });
+    }
+  } catch (err) {
+    console.error('Errore caricamento lista pagine:', err);
+  }
+}
+
+// Carica pagina selezionata
+async function caricaPagina() {
+  const filename = document.getElementById('pageSelect').value;
+  if (!filename) {
+    showToast('Seleziona prima una pagina', true);
+    return;
+  }
+
+  if (pageModified && !confirm('Ci sono modifiche non salvate. Vuoi continuare senza salvare?')) {
+    return;
+  }
+
+  const btn = document.getElementById('loadPageBtn');
+  btn.disabled = true;
+  btn.textContent = 'Caricamento...';
+
+  try {
+    const res = await apiFetch(`/api/pagina?file=${encodeURIComponent(filename)}`);
+    const data = await res.json();
+
+    if (data.ok) {
+      currentPage = data.file;
+      document.getElementById('pageTitolo').value = data.titolo;
+      document.getElementById('pageSottotitolo').value = data.sottotitolo;
+
+      initEditor();
+      editor.value = data.contenuto;
+
+      savedContent = {
+        titolo: data.titolo,
+        sottotitolo: data.sottotitolo,
+        contenuto: data.contenuto
+      };
+      setPageModified(false);
+
+      document.getElementById('pageEditorSection').style.display = 'block';
+      document.getElementById('pageStatus').textContent = '';
+      showToast(`Pagina "${data.titolo}" caricata`);
+    } else {
+      throw new Error(data.errore);
+    }
+  } catch (err) {
+    showToast('Errore: ' + err.message, true);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Carica';
+}
+
+// Salva pagina
+async function salvaPagina() {
+  if (!currentPage) return;
+
+  const btn = document.getElementById('savePageBtn');
+  const status = document.getElementById('pageStatus');
+  btn.disabled = true;
+  btn.textContent = 'Salvataggio in corso...';
+
+  try {
+    const payload = {
+      file: currentPage,
+      titolo: document.getElementById('pageTitolo').value.trim(),
+      sottotitolo: document.getElementById('pageSottotitolo').value.trim(),
+      contenuto: editor.value
+    };
+
+    const res = await apiFetch('/api/salva-pagina', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+
+    if (data.ok) {
+      savedContent = {
+        titolo: payload.titolo,
+        sottotitolo: payload.sottotitolo,
+        contenuto: payload.contenuto
+      };
+      setPageModified(false);
+      status.style.color = '#28a745';
+      status.innerHTML = '&#10003; Salvato (backup: ' + data.backup + ')';
+      showToast('Pagina pubblicata con successo!');
+    } else {
+      throw new Error(data.errore);
+    }
+  } catch (err) {
+    status.style.color = '#dc3545';
+    status.textContent = 'Errore: ' + err.message;
+    showToast('Errore nel salvataggio', true);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Pubblica modifiche';
+}
+
+// Anteprima (live, senza salvare su disco)
+async function anteprimaPagina() {
+  if (!currentPage || !editor) return;
+
+  try {
+    const res = await apiFetch('/api/anteprima', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        file: currentPage,
+        titolo: document.getElementById('pageTitolo').value.trim(),
+        sottotitolo: document.getElementById('pageSottotitolo').value.trim(),
+        contenuto: editor.value
+      })
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.errore || 'Errore anteprima');
+    }
+
+    const html = await res.text();
+    const win = window.open('', '_blank');
+    if (win) {
+      win.document.write(html);
+      win.document.close();
+    }
+  } catch (err) {
+    showToast('Errore anteprima: ' + err.message, true);
+  }
+}
+
+// Download backup HTML del contenuto corrente
+function downloadBackupPagina() {
+  if (!editor) return;
+  const html = editor.value;
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `contenuto_${currentPage || 'pagina'}_backup.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('Backup contenuto scaricato');
+}
+
+// Event listeners pagine
+document.getElementById('loadPageBtn').addEventListener('click', caricaPagina);
+document.getElementById('savePageBtn').addEventListener('click', salvaPagina);
+document.getElementById('previewPageBtn').addEventListener('click', anteprimaPagina);
+document.getElementById('downloadPageBtn').addEventListener('click', downloadBackupPagina);
+
+// Track changes on title/subtitle inputs
+document.getElementById('pageTitolo').addEventListener('input', () => setPageModified(true));
+document.getElementById('pageSottotitolo').addEventListener('input', () => setPageModified(true));
+
+// Ctrl+S shortcut
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+    e.preventDefault();
+    // Save based on active tab
+    const pagineTab = document.getElementById('tab-pagine');
+    if (pagineTab.classList.contains('active') && currentPage) {
+      salvaPagina();
+    } else {
+      // Notizie tab
+      saveBtn.click();
+    }
+  }
+});
+
+// Warning modifiche non salvate
+window.addEventListener('beforeunload', (e) => {
+  if (pageModified) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+// Inizializzazione: controlla auth
+checkAuth();
+
+
+// ============================================================
+// UPLOAD FILE (condiviso)
+// ============================================================
+const ALLOWED_EXTENSIONS_CLIENT = new Set([
+  'pdf', 'doc', 'docx', 'odt', 'rtf', 'txt',
+  'xls', 'xlsx', 'ods', 'csv',
+  'ppt', 'pptx', 'odp',
+  'jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'svg',
+  'zip', 'rar', '7z'
+]);
+const MAX_FILE_SIZE_CLIENT = 10 * 1024 * 1024; // 10MB
+
+async function uploadFile(file, cartella) {
+  // Validazione client-side
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (!ALLOWED_EXTENSIONS_CLIENT.has(ext)) {
+    return { ok: false, errore: `Tipo file ".${ext}" non consentito` };
+  }
+  if (file.size > MAX_FILE_SIZE_CLIENT) {
+    const sizeMb = (file.size / (1024 * 1024)).toFixed(1);
+    return { ok: false, errore: `File troppo grande (${sizeMb}MB). Massimo: 10MB` };
+  }
+
+  // Leggi come base64
+  const base64 = await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = () => reject(new Error('Errore lettura file'));
+    reader.readAsDataURL(file);
+  });
+
+  // POST al server
+  try {
+    const res = await apiFetch('/api/upload-file', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        file_data: base64,
+        filename: file.name,
+        cartella: cartella
+      })
+    });
+    const data = await res.json();
+    return data;
+  } catch (err) {
+    return { ok: false, errore: 'Errore di rete: ' + err.message };
+  }
+}
+
+
+// ============================================================
+// MODALE INSERIMENTO SNIPPET
+// ============================================================
+let currentModalType = null;
+
+function apriModale(tipo) {
+  currentModalType = tipo;
+  const body = document.getElementById('modalBody');
+  const title = document.getElementById('modalTitle');
+
+  if (tipo === 'documento') {
+    title.textContent = 'Inserisci Documento';
+    body.innerHTML = `
+      <div class="form-group">
+        <label>Titolo documento *</label>
+        <input type="text" id="snippetTitolo" placeholder="Es: Circolare n. 123 - Oggetto">
+      </div>
+      <div class="form-group">
+        <label>Carica file dal computer</label>
+        <input type="file" id="snippetFile" accept=".pdf,.doc,.docx,.odt,.rtf,.txt,.xls,.xlsx,.ods,.csv,.ppt,.pptx,.odp,.jpg,.jpeg,.png,.gif,.bmp,.webp,.svg,.zip,.rar,.7z">
+        <small>Max 10MB - PDF, DOC, XLS, JPG e altri</small>
+        <div id="snippetUploadStatus" class="upload-status"></div>
+      </div>
+      <div class="form-group">
+        <label>oppure inserisci URL manualmente</label>
+        <input type="url" id="snippetUrl" placeholder="https://www.saettalivatinoravanusa.edu.it/files/...">
+      </div>
+      <div class="form-group">
+        <label>Testo del link</label>
+        <input type="text" id="snippetTestoLink" value="Scarica PDF" placeholder="Es: Scarica PDF, Visualizza, Apri">
+      </div>
+    `;
+    // Gestione upload file nella modale
+    setTimeout(() => {
+      const fileInput = document.getElementById('snippetFile');
+      if (fileInput) {
+        fileInput.addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const statusEl = document.getElementById('snippetUploadStatus');
+          // Determina cartella dallo slug della pagina corrente
+          let cartella = 'documenti';
+          if (currentPage) {
+            cartella = currentPage.replace('.html', '');
+          }
+          statusEl.className = 'upload-status loading';
+          statusEl.textContent = 'Caricamento in corso...';
+          const result = await uploadFile(file, cartella);
+          if (result.ok) {
+            document.getElementById('snippetUrl').value = result.url;
+            statusEl.className = 'upload-status success';
+            statusEl.textContent = 'File caricato: ' + result.filename;
+            // Auto-compila titolo se vuoto
+            const titoloInput = document.getElementById('snippetTitolo');
+            if (!titoloInput.value.trim()) {
+              const nameWithoutExt = file.name.replace(/\.[^/.]+$/, '').replace(/[_-]/g, ' ');
+              titoloInput.value = nameWithoutExt;
+            }
+          } else {
+            statusEl.className = 'upload-status error';
+            statusEl.textContent = result.errore;
+            fileInput.value = '';
+          }
+        });
+      }
+    }, 50);
+  } else if (tipo === 'sezione') {
+    title.textContent = 'Inserisci Sezione (H2)';
+    body.innerHTML = `
+      <div class="form-group">
+        <label>Titolo sezione *</label>
+        <input type="text" id="snippetTitolo" placeholder="Es: Documenti Anno Scolastico 2025/2026">
+      </div>
+    `;
+  } else if (tipo === 'blocco') {
+    title.textContent = 'Inserisci Blocco Testo';
+    body.innerHTML = `
+      <div class="form-group">
+        <label>Titolo blocco *</label>
+        <input type="text" id="snippetTitolo" placeholder="Es: Informazioni Importanti">
+      </div>
+      <div class="form-group">
+        <label>Testo</label>
+        <textarea id="snippetTesto" rows="4" placeholder="Testo del paragrafo..." style="width:100%;padding:0.6rem 0.8rem;border:1.5px solid #ddd;border-radius:8px;font-family:inherit;font-size:0.9rem;resize:vertical"></textarea>
+      </div>
+    `;
+  } else if (tipo === 'linkcard') {
+    title.textContent = 'Inserisci Link Card';
+    body.innerHTML = `
+      <div class="form-group">
+        <label>URL *</label>
+        <input type="url" id="snippetUrl" placeholder="https://...">
+      </div>
+      <div class="form-group">
+        <label>Titolo *</label>
+        <input type="text" id="snippetTitolo" placeholder="Es: Portale ARGO">
+      </div>
+      <div class="form-group">
+        <label>Descrizione</label>
+        <input type="text" id="snippetDescrizione" placeholder="Breve descrizione del link">
+      </div>
+    `;
+  }
+
+  document.getElementById('modalOverlay').classList.add('active');
+  // Focus primo input
+  setTimeout(() => {
+    const firstInput = body.querySelector('input, textarea');
+    if (firstInput) firstInput.focus();
+  }, 100);
+}
+
+function chiudiModale() {
+  document.getElementById('modalOverlay').classList.remove('active');
+  currentModalType = null;
+}
+
+function generaSnippet() {
+  let snippet = '';
+
+  if (currentModalType === 'documento') {
+    const titolo = document.getElementById('snippetTitolo').value.trim();
+    const url = document.getElementById('snippetUrl').value.trim();
+    const testoLink = document.getElementById('snippetTestoLink').value.trim() || 'Scarica PDF';
+    if (!titolo || !url) { showToast('Compila titolo e URL', true); return null; }
+    snippet = `<div class="doc-item">
+  <div class="doc-item-icon">
+    <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+      <polyline points="14 2 14 8 20 8"/>
+    </svg>
+  </div>
+  <div class="doc-item-info">
+    <h3>${escapeHtml(titolo)}</h3>
+  </div>
+  <a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="doc-item-download">
+    ${escapeHtml(testoLink)}<span class="sr-only"> (si apre in una nuova finestra)</span>
+  </a>
+</div>`;
+  } else if (currentModalType === 'sezione') {
+    const titolo = document.getElementById('snippetTitolo').value.trim();
+    if (!titolo) { showToast('Inserisci un titolo', true); return null; }
+    snippet = `<h2>${escapeHtml(titolo)}</h2>`;
+  } else if (currentModalType === 'blocco') {
+    const titolo = document.getElementById('snippetTitolo').value.trim();
+    const testo = document.getElementById('snippetTesto').value.trim();
+    if (!titolo) { showToast('Inserisci un titolo', true); return null; }
+    snippet = `<div class="content-block">
+  <h2>${escapeHtml(titolo)}</h2>
+  <p>${testo ? escapeHtml(testo) : 'Testo qui...'}</p>
+</div>`;
+  } else if (currentModalType === 'linkcard') {
+    const url = document.getElementById('snippetUrl').value.trim();
+    const titolo = document.getElementById('snippetTitolo').value.trim();
+    const desc = (document.getElementById('snippetDescrizione').value || '').trim();
+    if (!url || !titolo) { showToast('Compila URL e titolo', true); return null; }
+    snippet = `<a href="${escapeHtml(url)}" target="_blank" rel="noopener" class="link-card">
+  <h3>${escapeHtml(titolo)}</h3>
+  ${desc ? '<p>' + escapeHtml(desc) + '</p>' : ''}
+  <span class="sr-only"> (si apre in una nuova finestra)</span>
+</a>`;
+  }
+
+  return snippet;
+}
+
+document.getElementById('modalConfirmBtn').addEventListener('click', () => {
+  const snippet = generaSnippet();
+  if (!snippet) return;
+
+  if (editor) {
+    editor.s.insertHTML(snippet);
+    editor.focus();
+  }
+
+  chiudiModale();
+  showToast('Elemento inserito nell\'editor');
+});
+
+// Chiudi modale con Escape
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && currentModalType) {
+    chiudiModale();
+  }
+});
+
+// Chiudi modale cliccando fuori
+document.getElementById('modalOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    chiudiModale();
+  }
+});
+
+// Enter nella modale per confermare
+document.getElementById('snippetModal').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+    e.preventDefault();
+    document.getElementById('modalConfirmBtn').click();
+  }
+});
+
+
+// ============================================================
+// TOAST (condiviso)
+// ============================================================
+function showToast(msg, isError) {
+  const toast = document.getElementById('toast');
+  toast.textContent = msg;
+  toast.style.background = isError ? '#dc3545' : '#28a745';
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 2500);
+}
+</script>
+
+</body>
+</html>

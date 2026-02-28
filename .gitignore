@@ -1,0 +1,5 @@
+nul
+.claude/
+__pycache__/
+data/users.json
+*.backup
