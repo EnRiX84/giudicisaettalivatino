@@ -21,6 +21,7 @@ from http.cookies import SimpleCookie
 PORT = 3000
 SITE_DIR = os.path.dirname(os.path.abspath(__file__)) if '__file__' in dir() else os.getcwd()
 NOTIZIE_PATH = os.path.join(SITE_DIR, "data", "notizie.json")
+ORGANIGRAMMA_PATH = os.path.join(SITE_DIR, "data", "organigramma.json")
 PAGINE_DIR = os.path.join(SITE_DIR, "pagine")
 USERS_PATH = os.path.join(SITE_DIR, "data", "users.json")
 
@@ -255,6 +256,10 @@ class SitoHandler(http.server.SimpleHTTPRequestHandler):
             if not self.require_auth('admin'):
                 return
             self.handle_lista_utenti()
+        elif path == "/api/organigramma":
+            if not self.require_auth('editor'):
+                return
+            self.handle_get_organigramma()
         else:
             # File statici
             super().do_GET()
@@ -296,6 +301,10 @@ class SitoHandler(http.server.SimpleHTTPRequestHandler):
             if not self.require_auth('editor'):
                 return
             self.handle_anteprima()
+        elif self.path == "/api/salva-organigramma":
+            if not self.require_auth('editor'):
+                return
+            self.handle_salva_organigramma()
         else:
             self.send_error(404, "Endpoint non trovato")
 
@@ -783,6 +792,53 @@ class SitoHandler(http.server.SimpleHTTPRequestHandler):
         except Exception as e:
             self.send_error_json(500, f"Errore cambio ruolo: {e}")
 
+    # --- API: Organigramma ---
+    def handle_get_organigramma(self):
+        try:
+            if not os.path.exists(ORGANIGRAMMA_PATH):
+                self.send_json({"ok": True, "anno_scolastico": "", "sezioni": []})
+                return
+            with open(ORGANIGRAMMA_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+            self.send_json({"ok": True, **data})
+            print(f"[OK] Organigramma caricato")
+        except Exception as e:
+            self.send_error_json(500, f"Errore lettura organigramma: {e}")
+
+    def handle_salva_organigramma(self):
+        try:
+            data = self.read_json_body()
+            anno = data.get("anno_scolastico", "").strip()
+            sezioni = data.get("sezioni", [])
+
+            if not anno:
+                self.send_error_json(400, "Anno scolastico obbligatorio")
+                return
+            if not isinstance(sezioni, list):
+                self.send_error_json(400, "Formato sezioni non valido")
+                return
+
+            organigramma = {"anno_scolastico": anno, "sezioni": sezioni}
+
+            # Backup del file esistente
+            if os.path.exists(ORGANIGRAMMA_PATH):
+                backup_name = gestisci_backup(ORGANIGRAMMA_PATH)
+            else:
+                backup_name = None
+
+            os.makedirs(os.path.dirname(ORGANIGRAMMA_PATH), exist_ok=True)
+            with open(ORGANIGRAMMA_PATH, "w", encoding="utf-8") as f:
+                json.dump(organigramma, f, ensure_ascii=False, indent=2)
+
+            msg = "Organigramma pubblicato con successo"
+            self.send_json({"ok": True, "messaggio": msg, "backup": backup_name})
+            print(f"[OK] Organigramma salvato ({len(sezioni)} sezioni, backup: {backup_name})")
+
+        except json.JSONDecodeError:
+            self.send_error_json(400, "JSON non valido")
+        except Exception as e:
+            self.send_error_json(500, f"Errore salvataggio organigramma: {e}")
+
     # --- Utility ---
     def send_json(self, data):
         self.send_response(200)
@@ -808,7 +864,7 @@ class SitoHandler(http.server.SimpleHTTPRequestHandler):
 
 def main():
     created = init_users()
-    with socketserver.TCPServer(("", PORT), SitoHandler) as httpd:
+    with socketserver.ThreadingTCPServer(("", PORT), SitoHandler) as httpd:
         url = f"http://localhost:{PORT}"
         print("=" * 50)
         print("  IISS Giudici Saetta e Livatino")

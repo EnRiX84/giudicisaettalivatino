@@ -1,0 +1,324 @@
+{
+  "anno_scolastico": "2025/2026",
+  "sezioni": [
+    {
+      "titolo": "Dirigenza e Collaboratori",
+      "incarichi": [
+        {
+          "ruolo": "Dirigente Scolastico",
+          "persone": [
+            "Prof. Michele Di Pasquali"
+          ]
+        },
+        {
+          "ruolo": "Primo Collaboratore",
+          "persone": [
+            "Prof.ssa Simona Iannicelli"
+          ]
+        },
+        {
+          "ruolo": "Secondo Collaboratore",
+          "persone": [
+            "Prof. Marco Fumo"
+          ]
+        }
+      ]
+    },
+    {
+      "titolo": "Collaboratori di Plesso",
+      "incarichi": [
+        {
+          "ruolo": "Plesso Centrale (V.le Lauricella, Ravanusa)",
+          "persone": [
+            "Prof.ssa D'Angelo Aurora"
+          ]
+        },
+        {
+          "ruolo": "Plesso R. Levi Montalcini (Campobello)",
+          "persone": [
+            "Prof. Ingrao Antonino"
+          ]
+        },
+        {
+          "ruolo": "Plesso Vittorini",
+          "persone": [
+            "Prof.ssa Maria Pia Carmina",
+            "Prof.ssa Patrizia Tornambè"
+          ]
+        },
+        {
+          "ruolo": "Via Basento",
+          "persone": [
+            "Prof.ssa Giuseppina Lo Bello"
+          ]
+        }
+      ]
+    },
+    {
+      "titolo": "Funzioni Strumentali",
+      "incarichi": [
+        {
+          "ruolo": "Area 1 - Risorse professionali e Dispersione scolastica",
+          "persone": [
+            "Prof.ssa Caruso Spinelli Ilaria (Ravanusa)",
+            "Prof.ssa Gibiino Carmela (Campobello)"
+          ]
+        },
+        {
+          "ruolo": "Area 2 - Risultati scolastici, Orientamento",
+          "persone": [
+            "Prof. Gruttadauria Domenico"
+          ]
+        },
+        {
+          "ruolo": "Area 3 - Curricolo e Progettazione",
+          "persone": [
+            "Prof.ssa Falsone Giuseppina (Ravanusa)",
+            "Prof.ssa Sciascia Monica (Campobello)"
+          ]
+        },
+        {
+          "ruolo": "Area 4 - Inclusione, Recupero e Potenziamento",
+          "persone": [
+            "Prof.ssa Iacona Cettina (BES)",
+            "Prof.ssa Sanfilippo Sabina (Disabilità)"
+          ]
+        },
+        {
+          "ruolo": "Area 5 - Territorio e Rapporti con le famiglie",
+          "persone": [
+            "Prof.ssa Lazzaro Manuela"
+          ]
+        }
+      ]
+    },
+    {
+      "titolo": "Referenze",
+      "incarichi": [
+        {
+          "ruolo": "PCTO",
+          "persone": [
+            "Prof.ssa Brancato Giusy (Ravanusa)",
+            "Prof. Pitruzzella Antonio (Campobello)"
+          ]
+        },
+        {
+          "ruolo": "Team Emergenza Antibullismo",
+          "persone": [
+            "Morello Angela",
+            "Vinci Giuseppe",
+            "Brucculeri Luigi",
+            "Soldano Valeria",
+            "D'Angelo Giusy"
+          ]
+        },
+        {
+          "ruolo": "Comodato Libri",
+          "persone": [
+            "Prof.ssa Brancato G. (LSU)",
+            "Prof.ssa Tornambè Patrizia (LS)",
+            "Prof. Manno Calogero (ITC)"
+          ]
+        },
+        {
+          "ruolo": "Educazione Civica",
+          "persone": [
+            "Prof. Timineri Gaetano"
+          ]
+        },
+        {
+          "ruolo": "Piattaforma Erasmus (Mobility Tool)",
+          "persone": [
+            "Prof.ssa Magrì J.",
+            "Prof. Traina Calogero"
+          ]
+        },
+        {
+          "ruolo": "Integrazione alunni H",
+          "persone": [
+            "Prof.ssa Brancato Giusy"
+          ]
+        },
+        {
+          "ruolo": "Legalità e Convivenza civile",
+          "persone": [
+            "Prof. Timineri Gaetano"
+          ]
+        },
+        {
+          "ruolo": "Educazione ambientale",
+          "persone": [
+            "Prof.ssa Bifulco Silvana"
+          ]
+        },
+        {
+          "ruolo": "Educazione alimentare",
+          "persone": [
+            "Prof.ssa Petruzzelli Chiara"
+          ]
+        },
+        {
+          "ruolo": "Educazione alla salute e affettività",
+          "persone": [
+            "Prof.ssa Sammartino Maria Assunta"
+          ]
+        },
+        {
+          "ruolo": "Integrazione alunni stranieri",
+          "persone": [
+            "Prof.ssa Corrao Francesca"
+          ]
+        },
+        {
+          "ruolo": "Pari opportunità",
+          "persone": [
+            "Prof.ssa Lo Bello Giuseppina"
+          ]
+        },
+        {
+          "ruolo": "Educazione stradale",
+          "persone": [
+            "Prof.ssa Soldano Valeria"
+          ]
+        },
+        {
+          "ruolo": "Consulta Provinciale",
+          "persone": [
+            "Prof.ssa Lo Vullo Maria Pia"
+          ]
+        },
+        {
+          "ruolo": "Comunicazione esterna",
+          "persone": [
+            "Prof. Fumo Marco"
+          ]
+        },
+        {
+          "ruolo": "Certificazioni Cambridge",
+          "persone": [
+            "Prof.ssa Caruso Spinelli Ilaria"
+          ]
+        },
+        {
+          "ruolo": "Viaggi d'Istruzione",
+          "persone": [
+            "Prof. La Greca Calogero (Ravanusa)",
+            "Prof.ssa Gibiino Carmela (Campobello)"
+          ]
+        },
+        {
+          "ruolo": "Centro Sportivo Studentesco",
+          "persone": [
+            "Prof. La Greca Calogero"
+          ]
+        },
+        {
+          "ruolo": "Sito Web",
+          "persone": [
+            "Prof. Tommaselli Salvatore"
+          ]
+        },
+        {
+          "ruolo": "INVALSI",
+          "persone": [
+            "Prof. Tommaselli Salvatore",
+            "Prof.ssa Lo Vullo Maria Pia",
+            "Prof. Vinci Giuseppe"
+          ]
+        },
+        {
+          "ruolo": "Patti Formativi CPIA",
+          "persone": [
+            "Prof.ssa Iannicelli Simona",
+            "Prof.ssa Tornambè Maria Antonietta"
+          ]
+        },
+        {
+          "ruolo": "Curvatura Biomedica",
+          "persone": [
+            "Prof. Traina Calogero"
+          ]
+        }
+      ]
+    },
+    {
+      "titolo": "Commissioni",
+      "incarichi": [
+        {
+          "ruolo": "Nucleo Interno di Valutazione (N.I.V.)",
+          "persone": [
+            "Prof.ssa Tornambè Antonietta",
+            "Prof.ssa Lo Vullo Maria Pia",
+            "Prof.ssa Falsone Giuseppina",
+            "Prof.ssa Lo Curto Carmela",
+            "Prof.ssa Accascio Piera",
+            "Prof.ssa Caruso Spinelli Ilaria"
+          ]
+        },
+        {
+          "ruolo": "Commissione Orario",
+          "persone": [
+            "Prof.ssa Iannicelli Simona",
+            "Prof. Fumo Marco"
+          ]
+        },
+        {
+          "ruolo": "Orientamento in entrata",
+          "persone": [
+            "Vinci Giuseppe",
+            "Timineri Gaetano",
+            "Sanfilippo Sabina",
+            "Albrizzi Ivana",
+            "Lo Vullo Maria Pia",
+            "Lo Curto Carmela",
+            "Vinci Giuseppa",
+            "Gibiino Carmela",
+            "Ragusa Lina",
+            "Gattuso Luigia",
+            "Zafarana Annalisa",
+            "Spanò Vincenzo",
+            "D'Angelo Giusy"
+          ]
+        },
+        {
+          "ruolo": "Intercultura/Erasmus",
+          "persone": [
+            "Iannicelli Simona",
+            "Caruso Spinelli Ilaria",
+            "Timineri Gaetano",
+            "Fumo Marco"
+          ]
+        },
+        {
+          "ruolo": "Educazione Civica (integrazione curricolo)",
+          "persone": [
+            "Prof.ssa Iannicelli Simona",
+            "Prof. Timineri Gaetano",
+            "Prof.ssa Brunetto",
+            "Prof.ssa Zafarana"
+          ]
+        }
+      ]
+    },
+    {
+      "titolo": "Animatore e Team Digitale",
+      "incarichi": [
+        {
+          "ruolo": "Animatore Digitale",
+          "persone": [
+            "Prof. Marco Fumo"
+          ]
+        },
+        {
+          "ruolo": "Team Digitale",
+          "persone": [
+            "Prof. Tommaselli S.",
+            "Prof. Caruso E.M.",
+            "Prof. Vinci Giuseppe",
+            "Prof. Brancato Giuseppe"
+          ]
+        }
+      ]
+    }
+  ]
+}

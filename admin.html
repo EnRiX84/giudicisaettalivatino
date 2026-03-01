@@ -279,6 +279,47 @@
     }
     .add-user-form .form-group { flex: 1; min-width: 140px; margin-bottom: 0; }
 
+    /* Organigramma admin */
+    .org-sezione-box {
+      background: #fff; border-radius: 12px; padding: 1.5rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-bottom: 1.5rem;
+    }
+    .org-sezione-header {
+      display: flex; align-items: center; gap: 0.8rem; margin-bottom: 1rem;
+      padding-bottom: 0.5rem; border-bottom: 2px solid #c9a84c;
+    }
+    .org-sezione-header input {
+      flex: 1; font-size: 1.1rem; font-weight: 600; color: #1a3a6b;
+      border: 1.5px solid #ddd; border-radius: 8px; padding: 0.4rem 0.8rem;
+      font-family: inherit;
+    }
+    .org-sezione-header input:focus { outline: none; border-color: #1a3a6b; }
+    .org-incarico {
+      display: flex; gap: 0.5rem; align-items: start;
+      padding: 0.6rem 0; border-bottom: 1px solid #f0f0f0;
+    }
+    .org-incarico:last-child { border-bottom: none; }
+    .org-incarico-fields { flex: 1; display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .org-incarico-fields input {
+      flex: 1; min-width: 200px; padding: 0.5rem 0.7rem; border: 1.5px solid #ddd;
+      border-radius: 8px; font-family: inherit; font-size: 0.88rem;
+    }
+    .org-incarico-fields input:focus { outline: none; border-color: #1a3a6b; }
+    .org-incarico-fields textarea {
+      flex: 2; min-width: 250px; padding: 0.5rem 0.7rem; border: 1.5px solid #ddd;
+      border-radius: 8px; font-family: inherit; font-size: 0.88rem;
+      resize: vertical; min-height: 38px; height: 38px;
+    }
+    .org-incarico-fields textarea:focus { outline: none; border-color: #1a3a6b; }
+    .org-incarico-actions {
+      display: flex; flex-direction: column; gap: 0.2rem; flex-shrink: 0;
+    }
+    .org-incarico-actions button {
+      background: none; border: 1px solid #ccc; border-radius: 4px;
+      padding: 0.15rem 0.4rem; cursor: pointer; font-size: 0.75rem;
+    }
+    .org-incarico-actions button:hover { background: #eee; }
+
     @media (max-width: 600px) {
       .link-row { flex-direction: column; }
       .news-item { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
@@ -286,6 +327,8 @@
       .page-selector-row { flex-direction: column; }
       .user-info { flex-wrap: wrap; gap: 0.4rem; }
       .add-user-form { flex-direction: column; }
+      .org-incarico { flex-direction: column; }
+      .org-incarico-actions { flex-direction: row; }
     }
   </style>
 </head>
@@ -331,6 +374,7 @@
 <div class="tab-nav">
   <button class="tab-btn active" data-tab="tab-notizie">Notizie</button>
   <button class="tab-btn" data-tab="tab-pagine">Pagine</button>
+  <button class="tab-btn" data-tab="tab-organigramma">Organigramma</button>
   <button class="tab-btn" data-tab="tab-utenti" id="tabUtentiBtn" style="display:none">Utenti</button>
 </div>
 
@@ -509,6 +553,49 @@
 
 </div>
 
+<!-- ===================== TAB ORGANIGRAMMA ===================== -->
+<div id="tab-organigramma" class="tab-content" style="padding-top:1.5rem">
+
+  <div class="instructions">
+    <strong>Gestione Organigramma:</strong>
+    <ol>
+      <li>Modifica l'anno scolastico, i titoli delle sezioni, i ruoli e le persone</li>
+      <li>Puoi aggiungere/eliminare sezioni e incarichi, e riordinare gli incarichi</li>
+      <li>Clicca <strong>"Pubblica Organigramma"</strong> per salvare e rendere visibili le modifiche</li>
+    </ol>
+  </div>
+
+  <!-- Anno scolastico -->
+  <div class="admin-section">
+    <h2>Anno Scolastico</h2>
+    <div class="form-group">
+      <input type="text" id="orgAnno" placeholder="Es: 2025/2026" style="max-width:250px">
+    </div>
+  </div>
+
+  <!-- Container sezioni -->
+  <div id="orgSezioniContainer"></div>
+
+  <!-- Azioni globali -->
+  <div style="margin-bottom:1.5rem; display:flex; gap:0.5rem; flex-wrap:wrap">
+    <button class="btn btn-outline" type="button" id="orgAggiungiSezione">+ Aggiungi Sezione</button>
+  </div>
+
+  <div class="admin-section">
+    <h2>Pubblica</h2>
+    <p style="font-size:0.85rem; margin-bottom:1rem; color:#555">
+      Clicca per pubblicare l'organigramma aggiornato sul sito.
+    </p>
+    <div class="actions">
+      <button class="btn btn-success" id="orgPubblicaBtn" style="font-size:1rem; padding:0.8rem 2rem">
+        Pubblica Organigramma
+      </button>
+    </div>
+    <div id="orgStatus" style="margin-top:0.8rem; font-size:0.85rem; display:none"></div>
+  </div>
+
+</div>
+
 <!-- ===================== TAB UTENTI ===================== -->
 <div id="tab-utenti" class="tab-content" style="padding-top:1.5rem">
 
@@ -641,6 +728,7 @@ function showAdminApp() {
   // Carica dati
   caricaNotizie();
   caricaListaPagine();
+  caricaOrganigramma();
   if (currentUser.ruolo === 'admin') {
     caricaListaUtenti();
   }
@@ -1579,6 +1667,161 @@ document.getElementById('snippetModal').addEventListener('keydown', (e) => {
     e.preventDefault();
     document.getElementById('modalConfirmBtn').click();
   }
+});
+
+
+// ============================================================
+// ORGANIGRAMMA
+// ============================================================
+let orgData = { anno_scolastico: '', sezioni: [] };
+
+async function caricaOrganigramma() {
+  try {
+    const res = await apiFetch('/api/organigramma');
+    const data = await res.json();
+    if (data.ok) {
+      orgData = { anno_scolastico: data.anno_scolastico || '', sezioni: data.sezioni || [] };
+      renderOrganigramma();
+    }
+  } catch (err) {
+    console.error('Errore caricamento organigramma:', err);
+  }
+}
+
+function renderOrganigramma() {
+  document.getElementById('orgAnno').value = orgData.anno_scolastico;
+  const container = document.getElementById('orgSezioniContainer');
+  container.innerHTML = '';
+
+  orgData.sezioni.forEach((sez, si) => {
+    const box = document.createElement('div');
+    box.className = 'org-sezione-box';
+    box.dataset.sezione = si;
+
+    let html = '<div class="org-sezione-header">';
+    html += `<input type="text" value="${escapeHtml(sez.titolo)}" class="org-sezione-titolo" placeholder="Titolo sezione">`;
+    html += `<button class="btn btn-danger btn-small" type="button" onclick="orgEliminaSezione(${si})" title="Elimina sezione">&times;</button>`;
+    html += '</div>';
+
+    html += '<div class="org-incarichi-list">';
+    sez.incarichi.forEach((inc, ii) => {
+      html += renderIncaricoHtml(si, ii, inc, sez.incarichi.length);
+    });
+    html += '</div>';
+
+    html += `<button class="btn btn-outline btn-small" type="button" onclick="orgAggiungiIncarico(${si})" style="margin-top:0.5rem">+ Aggiungi incarico</button>`;
+
+    box.innerHTML = html;
+    container.appendChild(box);
+  });
+}
+
+function renderIncaricoHtml(si, ii, inc, total) {
+  const personeStr = inc.persone.join('\n');
+  let html = `<div class="org-incarico" data-incarico="${ii}">`;
+  html += '<div class="org-incarico-fields">';
+  html += `<input type="text" value="${escapeHtml(inc.ruolo)}" class="org-incarico-ruolo" placeholder="Ruolo">`;
+  html += `<textarea class="org-incarico-persone" placeholder="Persone (una per riga)">${escapeHtml(personeStr)}</textarea>`;
+  html += '</div>';
+  html += '<div class="org-incarico-actions">';
+  html += `<button type="button" onclick="orgMoveIncarico(${si},${ii},-1)" title="Sposta su" ${ii === 0 ? 'disabled' : ''}>&#9650;</button>`;
+  html += `<button type="button" onclick="orgMoveIncarico(${si},${ii},1)" title="Sposta giù" ${ii === total - 1 ? 'disabled' : ''}>&#9660;</button>`;
+  html += `<button type="button" onclick="orgEliminaIncarico(${si},${ii})" title="Elimina" style="color:#dc3545;border-color:#dc3545">&#10005;</button>`;
+  html += '</div>';
+  html += '</div>';
+  return html;
+}
+
+function orgRaccogliDati() {
+  orgData.anno_scolastico = document.getElementById('orgAnno').value.trim();
+  const boxes = document.querySelectorAll('.org-sezione-box');
+  orgData.sezioni = [];
+  boxes.forEach(box => {
+    const titolo = box.querySelector('.org-sezione-titolo').value.trim();
+    const incarichi = [];
+    box.querySelectorAll('.org-incarico').forEach(row => {
+      const ruolo = row.querySelector('.org-incarico-ruolo').value.trim();
+      const personeText = row.querySelector('.org-incarico-persone').value.trim();
+      const persone = personeText.split('\n').map(s => s.trim()).filter(s => s);
+      if (ruolo) {
+        incarichi.push({ ruolo, persone });
+      }
+    });
+    orgData.sezioni.push({ titolo, incarichi });
+  });
+}
+
+function orgAggiungiSezione() {
+  orgRaccogliDati();
+  orgData.sezioni.push({ titolo: 'Nuova Sezione', incarichi: [{ ruolo: '', persone: [''] }] });
+  renderOrganigramma();
+  // Scroll to new section
+  const boxes = document.querySelectorAll('.org-sezione-box');
+  if (boxes.length) boxes[boxes.length - 1].scrollIntoView({ behavior: 'smooth', block: 'center' });
+}
+
+function orgEliminaSezione(si) {
+  orgRaccogliDati();
+  if (!confirm('Eliminare la sezione "' + orgData.sezioni[si].titolo + '" e tutti i suoi incarichi?')) return;
+  orgData.sezioni.splice(si, 1);
+  renderOrganigramma();
+}
+
+function orgAggiungiIncarico(si) {
+  orgRaccogliDati();
+  orgData.sezioni[si].incarichi.push({ ruolo: '', persone: [''] });
+  renderOrganigramma();
+}
+
+function orgEliminaIncarico(si, ii) {
+  orgRaccogliDati();
+  orgData.sezioni[si].incarichi.splice(ii, 1);
+  renderOrganigramma();
+}
+
+function orgMoveIncarico(si, ii, dir) {
+  orgRaccogliDati();
+  const arr = orgData.sezioni[si].incarichi;
+  const ni = ii + dir;
+  if (ni < 0 || ni >= arr.length) return;
+  [arr[ii], arr[ni]] = [arr[ni], arr[ii]];
+  renderOrganigramma();
+}
+
+document.getElementById('orgAggiungiSezione').addEventListener('click', orgAggiungiSezione);
+
+document.getElementById('orgPubblicaBtn').addEventListener('click', async () => {
+  orgRaccogliDati();
+  const btn = document.getElementById('orgPubblicaBtn');
+  const status = document.getElementById('orgStatus');
+  btn.disabled = true;
+  btn.textContent = 'Salvataggio in corso...';
+  status.style.display = 'none';
+
+  try {
+    const res = await apiFetch('/api/salva-organigramma', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(orgData)
+    });
+    const data = await res.json();
+    if (data.ok) {
+      status.style.display = 'block';
+      status.style.color = '#28a745';
+      status.innerHTML = '&#10003; ' + data.messaggio + (data.backup ? ' (backup: ' + data.backup + ')' : '');
+      showToast('Organigramma pubblicato!');
+    } else {
+      throw new Error(data.errore || 'Errore sconosciuto');
+    }
+  } catch (err) {
+    status.style.display = 'block';
+    status.style.color = '#dc3545';
+    status.innerHTML = '&#10007; Errore: ' + err.message;
+    showToast('Errore nel salvataggio', true);
+  }
+
+  btn.disabled = false;
+  btn.textContent = 'Pubblica Organigramma';
 });
 
 

@@ -1744,3 +1744,68 @@ button.nav-link {
     text-align: center;
   }
 }
+
+/* --- Organigramma --- */
+.organigramma-sezione {
+  margin-bottom: 2.5rem;
+}
+
+.organigramma-sezione h2 {
+  font-size: 1.4rem;
+  color: var(--blue);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid var(--gold);
+}
+
+.organigramma-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0;
+}
+
+.organigramma-item {
+  display: flex;
+  gap: 1rem;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid var(--gray);
+  align-items: baseline;
+}
+
+.organigramma-item:last-child {
+  border-bottom: none;
+}
+
+.organigramma-item:hover {
+  background: var(--gray-light);
+}
+
+.organigramma-ruolo {
+  font-weight: 600;
+  color: var(--blue);
+  min-width: 280px;
+  flex-shrink: 0;
+  font-size: 0.95rem;
+}
+
+.organigramma-persone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 1rem;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.organigramma-persona {
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .organigramma-item {
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .organigramma-ruolo {
+    min-width: unset;
+  }
+}
