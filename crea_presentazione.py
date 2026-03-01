@@ -112,7 +112,7 @@ add_textbox(slide, 1, 2.5, 11.333, 0.6,
 add_textbox(slide, 1, 3.8, 11.333, 1.2,
     'Proposta di adozione del nuovo sito web istituzionale', 32, BIANCO, True, PP_ALIGN.CENTER)
 add_textbox(slide, 1, 5.0, 11.333, 0.6,
-    'Presentazione per il Team Digitale - Febbraio 2026', 18, RGBColor(0xAA, 0xAA, 0xCC), False, PP_ALIGN.CENTER)
+    'Presentazione per il Team Digitale - Marzo 2026', 18, RGBColor(0xAA, 0xAA, 0xCC), False, PP_ALIGN.CENTER)
 
 add_textbox(slide, 1, 5.8, 11.333, 0.5,
     'Conforme alle Linee Guida AgID e WCAG 2.1 AA', 16, ORO, True, PP_ALIGN.CENTER)
@@ -325,7 +325,7 @@ cards_data = [
     ('Offerta formativa', '4 indirizzi di studio con\nschede dedicate: Scientifico,\nScienze Umane, AFM, Biomedica'),
     ('7 sezioni progetti', 'Erasmus+, PNRR, PON FESR,\nPCTO, Cambridge, STEAM,\nWeCanJob'),
     ('15 banner istituzionali', 'Amm. Trasparente, Albo\nPretorio, Accesso Civico,\nPNRR, Erasmus+...'),
-    ('Pannello admin', 'Gestione notizie via browser,\npubblicazione con un click,\nbackup automatico'),
+    ('Pannello admin', 'Gestione notizie, pagine e\norganigramma via browser.\nPubblicazione online automatica'),
 ]
 
 for i, (title, body) in enumerate(cards_data):
@@ -536,6 +536,141 @@ for i, item in enumerate(compliance_items):
     add_textbox(slide, 0.8, 5.7 + i * 0.35, 11.733, 0.33, item, 12, VERDE)
 
 # =============================================
+# SLIDE - ORGANIGRAMMA SCOLASTICO (NUOVO v4)
+# =============================================
+slide = prs.slides.add_slide(prs.slide_layouts[6])
+add_bg(slide, BIANCO)
+add_shape_bg(slide, 0, 0, 13.333, 1.2, BLU)
+add_shape_bg(slide, 0, 1.15, 13.333, 0.05, ORO)
+add_textbox(slide, 0.8, 0.25, 11.733, 0.7, 'Organigramma Scolastico', 32, BIANCO, True)
+
+add_textbox(slide, 0.8, 1.5, 12, 0.5,
+    'Pagina pubblica e gestione admin completa dell\'organigramma dell\'istituto.', 18, TESTO, True)
+
+# Colonna sinistra - Pagina pubblica
+add_card(slide, 0.6, 2.2, 5.9, 4.5, 'Pagina pubblica', '')
+pub_items = [
+    '\u2713  Organigramma completo e navigabile',
+    '\u2713  6 sezioni: Dirigenza, Staff, Coordinatori,',
+    '    Referenti, Dipartimenti, Commissioni',
+    '\u2713  41 incarichi con nome e ruolo',
+    '\u2713  Layout card responsive mobile-first',
+    '\u2713  Dati caricati da JSON (aggiornamento live)',
+    '\u2713  Accessibile: semantica HTML, ARIA, focus',
+]
+for i, item in enumerate(pub_items):
+    add_textbox(slide, 0.8, 2.9 + i * 0.48, 5.5, 0.45, item, 13, VERDE)
+
+# Colonna destra - Gestione admin
+add_card(slide, 6.8, 2.2, 5.9, 4.5, 'Gestione Admin (4 tab)', '')
+admin_items = [
+    '\u2022  Tab Organigramma nel pannello admin',
+    '\u2022  Gestione sezioni: aggiungi/rimuovi/riordina',
+    '\u2022  Gestione incarichi per sezione',
+    '\u2022  Anno scolastico configurabile',
+    '\u2022  Anteprima live prima di pubblicare',
+    '\u2022  Backup automatico ad ogni salvataggio',
+    '\u2022  Dati dal verbale del Collegio Docenti',
+]
+for i, item in enumerate(admin_items):
+    add_textbox(slide, 7.0, 2.9 + i * 0.48, 5.5, 0.45, item, 13, TESTO)
+
+add_shape_bg(slide, 0.6, 6.9, 12.133, 0.5, RGBColor(0xE3, 0xF0, 0xFF))
+add_textbox(slide, 0.8, 6.93, 11.733, 0.4,
+    'Dati estratti dal verbale del Collegio Docenti. La segreteria aggiorna l\'organigramma in autonomia.',
+    13, BLU, True, PP_ALIGN.CENTER)
+
+# =============================================
+# SLIDE - PUBBLICAZIONE ONLINE AUTOMATICA (AGG. v5)
+# =============================================
+slide = prs.slides.add_slide(prs.slide_layouts[6])
+add_bg(slide, BIANCO)
+add_shape_bg(slide, 0, 0, 13.333, 1.2, BLU)
+add_shape_bg(slide, 0, 1.15, 13.333, 0.05, ORO)
+add_textbox(slide, 0.8, 0.25, 11.733, 0.7, 'Pubblicazione online: GitHub o FTP', 32, BIANCO, True)
+
+add_textbox(slide, 0.8, 1.5, 12, 0.8,
+    'Le modifiche vengono pubblicate automaticamente online. Due metodi disponibili:\nGitHub API (hosting gratuito) oppure FTP/FTPS (hosting tradizionale cPanel).', 18, TESTO, False)
+
+# Flusso visivo in 3 step
+sync_steps = [
+    ('1', 'Modifica', 'La segretaria modifica notizie,\npagine o organigramma\nnel pannello admin'),
+    ('2', 'Pubblica', 'Clicca il pulsante "Pubblica"\ncome sempre: il salvataggio\nlocale avviene normalmente'),
+    ('3', 'Online', 'Il server sincronizza\nautomaticamente via GitHub\no FTP. Sito aggiornato!'),
+]
+
+for i, (num, title, desc) in enumerate(sync_steps):
+    x = 1.0 + i * 4.0
+    circle = slide.shapes.add_shape(MSO_SHAPE.OVAL, Inches(x + 0.9), Inches(3.0), Inches(0.8), Inches(0.8))
+    circle.fill.solid()
+    circle.fill.fore_color.rgb = ORO
+    circle.line.fill.background()
+    tf = circle.text_frame
+    tf.paragraphs[0].text = num
+    tf.paragraphs[0].font.size = Pt(24)
+    tf.paragraphs[0].font.bold = True
+    tf.paragraphs[0].font.color.rgb = BLU_SCURO
+    tf.paragraphs[0].alignment = PP_ALIGN.CENTER
+    tf.vertical_anchor = MSO_ANCHOR.MIDDLE
+
+    add_textbox(slide, x, 4.0, 3, 0.5, title, 18, BLU, True, PP_ALIGN.CENTER)
+    add_textbox(slide, x, 4.5, 3, 1.2, desc, 14, TESTO, False, PP_ALIGN.CENTER)
+
+# Frecce tra gli step
+for i in range(2):
+    x = 3.7 + i * 4.0
+    add_textbox(slide, x, 3.1, 0.6, 0.6, '\u2192', 28, ORO, True, PP_ALIGN.CENTER)
+
+# Due metodi affiancati
+add_card(slide, 0.6, 5.6, 5.9, 1.7, 'GitHub Pages (API)', 'Hosting gratuito, HTTPS incluso.\nNessun Git da installare.\nIdeale per siti edu.it su GitHub.')
+add_card(slide, 6.8, 5.6, 5.9, 1.7, 'FTP / FTPS (hosting tradizionale)', 'Upload diretto su cPanel/hosting.\nConnessione sicura TLS.\nPerfetto per il server attuale.')
+
+# =============================================
+# SLIDE - TAB IMPOSTAZIONI ADMIN (NUOVO v5)
+# =============================================
+slide = prs.slides.add_slide(prs.slide_layouts[6])
+add_bg(slide, BIANCO)
+add_shape_bg(slide, 0, 0, 13.333, 1.2, BLU)
+add_shape_bg(slide, 0, 1.15, 13.333, 0.05, ORO)
+add_textbox(slide, 0.8, 0.25, 11.733, 0.7, 'Impostazioni: configurazione sync da admin', 32, BIANCO, True)
+
+add_textbox(slide, 0.8, 1.5, 12, 0.5,
+    'Il metodo di pubblicazione si configura direttamente dal pannello admin, senza toccare file di configurazione.', 18, TESTO, True)
+
+# Colonna sinistra - Come funziona
+add_card(slide, 0.6, 2.2, 5.9, 4.5, 'Tab Impostazioni (solo admin)', '')
+settings_items = [
+    '\u2713  Nuovo tab nel pannello admin',
+    '\u2713  Visibile solo per utenti admin',
+    '\u2713  Scelta metodo: Nessuno / GitHub / FTP',
+    '\u2713  Campi configurazione dinamici',
+    '\u2713  Pulsante "Testa Connessione"',
+    '\u2713  Pulsante "Salva Impostazioni"',
+    '\u2713  Password/token sempre mascherati',
+]
+for i, item in enumerate(settings_items):
+    add_textbox(slide, 0.8, 2.9 + i * 0.48, 5.5, 0.45, item, 13, VERDE)
+
+# Colonna destra - Configurazione FTP
+add_card(slide, 6.8, 2.2, 5.9, 4.5, 'Campi configurazione FTP/FTPS', '')
+ftp_items = [
+    '\u2022  Host del server FTP',
+    '\u2022  Porta (default: 21)',
+    '\u2022  Username e Password',
+    '\u2022  Percorso remoto (es. /public_html)',
+    '\u2022  Checkbox connessione sicura (TLS)',
+    '\u2022  Test connessione prima di salvare',
+    '\u2022  Creazione automatica directory remote',
+]
+for i, item in enumerate(ftp_items):
+    add_textbox(slide, 7.0, 2.9 + i * 0.48, 5.5, 0.45, item, 13, TESTO)
+
+add_shape_bg(slide, 0.6, 6.9, 12.133, 0.5, RGBColor(0xE3, 0xF0, 0xFF))
+add_textbox(slide, 0.8, 6.93, 11.733, 0.4,
+    'Implementato su tutti e 5 i siti: la segreteria configura la pubblicazione online in autonomia.',
+    13, BLU, True, PP_ALIGN.CENTER)
+
+# =============================================
 # SLIDE 9 - CARATTERISTICHE PECULIARI
 # =============================================
 slide = prs.slides.add_slide(prs.slide_layouts[6])
@@ -732,7 +867,8 @@ conclusions = [
     '\u2713  Conformità alle Linee Guida AgID e WCAG 2.1 AA',
     '\u2713  Azzeramento dei costi di hosting e manutenzione',
     '\u2713  Sicurezza intrinseca senza aggiornamenti continui',
-    '\u2713  Autonomia gestionale per il team digitale',
+    '\u2713  Autonomia gestionale completa: notizie, pagine, organigramma',
+    '\u2713  Pubblicazione online automatica, zero competenze tecniche',
     '\u2713  Accessibilità certificabile (Dichiarazione su form.agid.gov.it)',
 ]
 
@@ -748,7 +884,7 @@ add_textbox(slide, 1, 5.5, 11.333, 0.8,
     18, RGBColor(0xAA, 0xAA, 0xCC), False, PP_ALIGN.CENTER)
 
 add_textbox(slide, 1, 6.5, 11.333, 0.5,
-    'Febbraio 2026', 16, RGBColor(0x88, 0x88, 0xAA), False, PP_ALIGN.CENTER)
+    'Marzo 2026', 16, RGBColor(0x88, 0x88, 0xAA), False, PP_ALIGN.CENTER)
 
 # =============================================
 # SLIDE FINALE - FRASE AD EFFETTO
@@ -774,6 +910,6 @@ add_textbox(slide, 1, 6.1, 11.333, 0.5,
 # =============================================
 # SALVA
 # =============================================
-output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Presentazione_Nuovo_Sito_v3.pptx')
+output_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'Presentazione_Nuovo_Sito_v5.pptx')
 prs.save(output_path)
 print(f'Presentazione salvata in: {output_path}')

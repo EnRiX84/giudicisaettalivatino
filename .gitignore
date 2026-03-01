@@ -2,4 +2,5 @@ nul
 .claude/
 __pycache__/
 data/users.json
+data/sync_config.json
 *.backup
