@@ -667,7 +667,7 @@ for i, item in enumerate(ftp_items):
 
 add_shape_bg(slide, 0.6, 6.9, 12.133, 0.5, RGBColor(0xE3, 0xF0, 0xFF))
 add_textbox(slide, 0.8, 6.93, 11.733, 0.4,
-    'Implementato su tutti e 5 i siti: la segreteria configura la pubblicazione online in autonomia.',
+    'La segreteria configura il metodo di pubblicazione online in totale autonomia, senza toccare file di configurazione.',
     13, BLU, True, PP_ALIGN.CENTER)
 
 # =============================================
