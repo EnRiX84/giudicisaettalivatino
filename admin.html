@@ -590,6 +590,7 @@
       <button class="btn btn-success" id="orgPubblicaBtn" style="font-size:1rem; padding:0.8rem 2rem">
         Pubblica Organigramma
       </button>
+      <button class="btn btn-outline btn-small" id="orgAnteprimaBtn">Anteprima</button>
     </div>
     <div id="orgStatus" style="margin-top:0.8rem; font-size:0.85rem; display:none"></div>
   </div>
@@ -1822,6 +1823,49 @@ document.getElementById('orgPubblicaBtn').addEventListener('click', async () => 
 
   btn.disabled = false;
   btn.textContent = 'Pubblica Organigramma';
+});
+
+document.getElementById('orgAnteprimaBtn').addEventListener('click', () => {
+  orgRaccogliDati();
+  const data = orgData;
+  const anno = escapeHtml(data.anno_scolastico);
+
+  let sezioniHtml = '';
+  data.sezioni.forEach(sez => {
+    sezioniHtml += '<div class="organigramma-sezione">';
+    sezioniHtml += '<h2>' + escapeHtml(sez.titolo) + '</h2>';
+    sezioniHtml += '<div class="organigramma-grid">';
+    sez.incarichi.forEach(inc => {
+      sezioniHtml += '<div class="organigramma-item">';
+      sezioniHtml += '<div class="organigramma-ruolo">' + escapeHtml(inc.ruolo) + '</div>';
+      sezioniHtml += '<div class="organigramma-persone">';
+      inc.persone.forEach(p => {
+        sezioniHtml += '<span class="organigramma-persona">' + escapeHtml(p) + '</span>';
+      });
+      sezioniHtml += '</div></div>';
+    });
+    sezioniHtml += '</div></div>';
+  });
+
+  const html = `<!DOCTYPE html>
+<html lang="it"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anteprima Organigramma</title>
+<link rel="stylesheet" href="css/style.css">
+<style>.preview-bar{background:#fff3cd;color:#856404;text-align:center;padding:0.6rem;font-weight:600;font-size:0.9rem;border-bottom:2px solid #c9a84c;position:sticky;top:0;z-index:100}</style>
+</head><body>
+<div class="preview-bar">ANTEPRIMA - Queste modifiche non sono ancora pubblicate</div>
+<main id="main-content">
+<section class="page-header"><div class="container">
+<h1>Organigramma Scolastico</h1>
+<p>Anno Scolastico ${anno} - Incarichi e ruoli del personale docente</p>
+</div></section>
+<section class="page-content"><div class="container">
+${sezioniHtml}
+</div></section>
+</main></body></html>`;
+
+  const win = window.open('', '_blank');
+  if (win) { win.document.write(html); win.document.close(); }
 });
 
 
